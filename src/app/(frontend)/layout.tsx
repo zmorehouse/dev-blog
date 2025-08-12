@@ -69,7 +69,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                   </a>
                 </div>
 
-                <div className="footerTagline">click around, it's good for you.</div>
+                <div className="footerTagline">click around, it&apos;s good for you.</div>
               </div>
             </footer>
           </div>
