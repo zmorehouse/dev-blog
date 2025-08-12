@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import BackButton from '@/app/(frontend)/components/BackButton'
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -19,9 +20,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <main className="container">
-      <Link className="tag" href="/">
-        ← back
-      </Link>
+      <BackButton className="tag" />
       <h2 style={{ marginTop: 12 }}>{post.title}</h2>
       <div style={{ marginTop: 8, color: 'var(--muted)' }}>
         {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ''}
