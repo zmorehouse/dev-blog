@@ -18,7 +18,7 @@ html, body {
 a { color: inherit; text-decoration: none; }
 h1 { font-size: 1.8em; }
 
-.container { max-width: 760px; margin: 0 auto; padding: 32px 16px; }
+.container { max-width: 760px; margin: 0 auto; padding: 26px 16px; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; }
 time { color: var(--muted); font-size: 12px; }
 
@@ -27,7 +27,9 @@ time { color: var(--muted); font-size: 12px; }
   html { view-transition-name: none; }
 }
 
-a, button, input { -webkit-tap-highlight-color: transparent; }
+a, button, input { -webkit-tap-highlight-color: transparent; 
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
 
 /* =====================================
    Layout shell (sticky footer)
@@ -40,8 +42,8 @@ a, button, input { -webkit-tap-highlight-color: transparent; }
 ===================================== */
 .siteHeader { background: var(--bg); position: sticky; top: 0; z-index: 10; }
 .headerRow {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 0;
+  display: flex; align-items: end; justify-content: space-between;
+  padding: 40px 0;
   border-bottom: 1px solid var(--line); 
 }
 
@@ -80,6 +82,13 @@ font-size: 11px; pointer-events: none;
 }
 .copiedToast.show { opacity: 1; transform: translate(-50%, -10px); }
 
+.brand { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.logo { margin: 0; line-height: 1; }
+.subhead { margin: 10px 0 0 0; color: var(--muted); font-size: 12px; letter-spacing: .2px; }
+
+
+
+
 /* =====================================
    Cards & Lists
 ===================================== */
@@ -90,6 +99,11 @@ font-size: 11px; pointer-events: none;
   background: var(--card);
   border-radius: 14px;
   padding: 28px 22px;
+  transition:0.35s;
+}
+
+.card:hover {
+  transform:translateY(-3px);
 }
 
 .item { border: 0; padding: 0; }
@@ -101,6 +115,8 @@ font-size: 11px; pointer-events: none;
   background: #0e1013; color: var(--fg);
   border: 1px solid var(--line); border-radius: 10px;
   padding: 10px 12px; outline: none; caret-color: var(--fg);
+  letter-spacing:-0.25px;
+
 }
 .input:focus, .input:active {
   outline: none;
@@ -123,10 +139,10 @@ font-size: 11px; pointer-events: none;
   text-decoration: none;
   cursor: pointer;
 }
-.tag:hover { background: var(--card); color: var(--fg); }
+.tag:hover { background: var(--card); color: var(--fg); border-color:rgb(124, 124, 124) !important;}
 .tag:focus-visible { outline: 2px solid var(--line); outline-offset: 2px; }
 
-.tag[aria-pressed="true"], .tag.active { color: var(--fg); }
+.tag[aria-pressed="true"], .tag.active { color: var(--fg); background:#121317; border-color:rgb(124, 124, 124) !important; }
 
 button.tag {
   appearance: none; -webkit-appearance: none;
@@ -172,5 +188,9 @@ button.tag {
   h1 { text-align: center; }
   .headerRow { flex-direction: column; align-items: stretch; gap: 10px; }
   .nav { justify-content: center; }
+  .brand { align-items: center; text-align: center; }
+  .tagRow {
+    display:none;
+  }
 }
 

@@ -3,7 +3,7 @@ import './styles.css'
 import ContactLink from './components/ContactLink'
 
 export const metadata = {
-  title: "Zac's Dev Blog",
+  title: 'ZM Development Stuff',
   description: "tbh I haven't really thought this far",
 }
 
@@ -15,9 +15,12 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
           <div className="pageShell">
             <header className="siteHeader">
               <div className="container headerRow">
-                <h1 className="logo">
-                  <Link href="/">~/users/zac/articles</Link>
-                </h1>
+                <div className="brand">
+                  <h1 className="logo">
+                    <Link href="/">~/users/zac/articles</Link>
+                  </h1>
+                  <p className="subhead">exploring hypertext.</p>
+                </div>
 
                 <nav aria-label="Primary">
                   <ul className="nav">
@@ -26,8 +29,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                         ./portfolio
                       </a>
                     </li>
-
-                    <ContactLink />
+                    <ContactLink></ContactLink>
                   </ul>
                 </nav>
               </div>

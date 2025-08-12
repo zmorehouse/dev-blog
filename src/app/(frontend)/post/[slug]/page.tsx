@@ -21,7 +21,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <main className="container">
       <BackButton className="tag" />
-      <h2 style={{ marginTop: 12 }}>{post.title}</h2>
+      <h2 style={{ marginTop: 22 }}>{post.title}</h2>
       <div style={{ marginTop: 8, color: 'var(--muted)' }}>
         {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ''}
       </div>
