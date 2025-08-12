@@ -116,8 +116,8 @@ export default function LiveSearch({
       <div className="cards">
         {docs.map((p) => (
           <article key={p.id} className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
-              <h3 style={{ margin: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+              <h3 style={{ margin: 0 }} className="cardHeader">
                 <Link href={`/post/${p.slug}`} prefetch>
                   {p.title}
                 </Link>
@@ -129,7 +129,7 @@ export default function LiveSearch({
 
             {p.excerpt && <p style={{ margin: '6px 0 0', color: 'var(--muted)' }}>{p.excerpt}</p>}
 
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 20 }}>
               {p.tags.map((t, i) => (
                 <a
                   key={`${p.id}-${t}-${i}`}

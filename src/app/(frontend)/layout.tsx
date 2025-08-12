@@ -16,9 +16,9 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
             <header className="siteHeader">
               <div className="container headerRow">
                 <div className="brand">
-                  <h1 className="logo">
+                  <h2 className="logo">
                     <Link href="/">~/users/zac/articles</Link>
-                  </h1>
+                  </h2>
                   <p className="subhead">exploring hypertext.</p>
                 </div>
 
@@ -55,7 +55,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
 
                   <a
                     className="iconLink"
-                    href="https://linkedin.com/in/your-handle"
+                    href="https://www.linkedin.com/in/zmorehouse/"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn"
