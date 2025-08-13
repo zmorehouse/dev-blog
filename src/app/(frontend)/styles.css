@@ -33,6 +33,16 @@ a, button, input { -webkit-tap-highlight-color: transparent;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+code {
+	background-color: #2b2b2b;
+	color: white;
+	padding: 2px 5px 2px 5px;
+
+}
+
+::selection { background: rgb(138, 255, 235); color: #0b0c0e; }
+::-moz-selection { background: rgb(138, 255, 235); color: #0b0c0e; } 
+
 /* =====================================
    Layout shell (sticky footer)
 ===================================== */

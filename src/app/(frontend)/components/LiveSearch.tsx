@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useDeferredValue, startTransition, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -12,6 +12,10 @@ type Post = {
   publishedAt?: string | null
   tags: string[]
 }
+
+const cache = new Map<string, { ts: number; docs: Post[] }>()
+const CACHE_TTL = 30_000
+const LRU_LIMIT = 20
 
 export default function LiveSearch({
   initialDocs,
@@ -27,51 +31,70 @@ export default function LiveSearch({
   const [q, setQ] = useState(initialQ ?? '')
   const [tag, setTag] = useState<string | undefined>(initialTag)
   const [docs, setDocs] = useState<Post[]>(initialDocs)
-  const [tags, setTags] = useState<string[]>(initialTags)
   const [loading, setLoading] = useState(false)
+
+  const tags = initialTags
+
+  const dq = useDeferredValue(q)
+  const dtag = useDeferredValue(tag)
 
   const controllerRef = useRef<AbortController | null>(null)
   const timerRef = useRef<number | null>(null)
 
   const router = useRouter()
   useEffect(() => {
-    docs.slice(0, 6).forEach((p) => {
-      router.prefetch(`/post/${p.slug}`)
-    })
+    docs.slice(0, 3).forEach((p) => router.prefetch(`/post/${p.slug}`))
   }, [docs, router])
 
+  const key = useMemo(() => {
+    const s = new URLSearchParams()
+    if (dq) s.set('q', dq)
+    if (dtag) s.set('tag', dtag)
+    return s.toString()
+  }, [dq, dtag])
+
   useEffect(() => {
+    const newUrl = key ? `/?${key}` : '/'
+    window.history.replaceState(null, '', newUrl)
+
+    const now = Date.now()
+    const hit = cache.get(key)
+    if (hit && now - hit.ts < CACHE_TTL) {
+      startTransition(() => setDocs(hit.docs))
+      return
+    }
+
     if (timerRef.current) window.clearTimeout(timerRef.current)
     timerRef.current = window.setTimeout(async () => {
       if (controllerRef.current) controllerRef.current.abort()
       controllerRef.current = new AbortController()
       setLoading(true)
-
-      const params = new URLSearchParams()
-      if (q) params.set('q', q)
-      if (tag) params.set('tag', tag)
-
-      const newUrl = params.toString() ? `/?${params}` : '/'
-      window.history.replaceState(null, '', newUrl)
-
       try {
-        const res = await fetch(`/api/search?${params}`, {
+        const res = await fetch(`/api/search?${key}`, {
           signal: controllerRef.current.signal,
+          cache: 'no-store',
         })
         if (!res.ok) throw new Error('bad response')
         const json = await res.json()
-        setDocs(json.docs)
-        setTags(json.tags)
-      } catch (_) {
+
+        startTransition(() => setDocs(json.docs))
+
+        cache.set(key, { ts: Date.now(), docs: json.docs })
+        if (cache.size > LRU_LIMIT) {
+          const oldest = [...cache.entries()].sort((a, b) => a[1].ts - b[1].ts)[0]?.[0]
+          if (oldest) cache.delete(oldest)
+        }
+      } catch {
       } finally {
         setLoading(false)
       }
-    }, 220)
+    }, 160)
+
     return () => {
       if (timerRef.current) window.clearTimeout(timerRef.current)
       controllerRef.current?.abort()
     }
-  }, [q, tag])
+  }, [key])
 
   return (
     <>
@@ -84,6 +107,7 @@ export default function LiveSearch({
           onChange={(e) => setQ(e.target.value)}
           aria-label="Search posts"
         />
+
         <div className="tagRow">
           {tags.map((t) => {
             const active = tag === t
@@ -113,7 +137,7 @@ export default function LiveSearch({
         </div>
       </div>
 
-      <div className="cards">
+      <div className="cards" aria-busy={loading}>
         {docs.map((p) => (
           <article key={p.id} className="card">
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
@@ -142,6 +166,7 @@ export default function LiveSearch({
             </div>
           </article>
         ))}
+
         {docs.length === 0 && !loading && (
           <div className="item" style={{ color: 'var(--muted)' }}>
             no matches

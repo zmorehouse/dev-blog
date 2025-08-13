@@ -3,8 +3,8 @@ import './styles.css'
 import ContactLink from './components/ContactLink'
 
 export const metadata = {
-  title: 'ZM Development Stuff',
-  description: "tbh I haven't really thought this far",
+  title: 'Exploring Hypertext',
+  description: 'Welcome to my blog.',
 }
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,9 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
               <div className="container headerRow">
                 <div className="brand">
                   <h2 className="logo">
-                    <Link href="/">~/users/zac/articles</Link>
+                    <Link href="/">
+                      ~/users/zac/<span style={{ color: 'rgb(138, 255, 235);' }}>articles</span>
+                    </Link>
                   </h2>
                   <p className="subhead">exploring hypertext.</p>
                 </div>
