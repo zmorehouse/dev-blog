@@ -18,7 +18,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                 <div className="brand">
                   <h2 className="logo">
                     <Link href="/">
-                      ~/users/zac/<span style={{ color: 'rgb(138, 255, 235);' }}>articles</span>
+                      ~/users/zac/<span style={{ color: 'rgb(138, 255, 235)' }}>articles</span>
                     </Link>
                   </h2>
                   <p className="subhead">exploring hypertext.</p>
