@@ -1,35 +1,23 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import clsx from 'clsx'
 
-export default function BackButton({
-  className = 'tag',
-  children = '← back',
-}: {
-  className?: string
-  children?: React.ReactNode
-}) {
+export default function BackButton({ className }: { className?: string }) {
   const router = useRouter()
-
-  useEffect(() => {
-    router.prefetch('/')
-  }, [router])
-
-  function handleClick() {
-    const ref = document.referrer
-    const sameOrigin = ref && new URL(ref).origin === window.location.origin
-
-    if (sameOrigin && window.history.length > 1) {
-      router.back()
-    } else {
-      router.replace('/')
-    }
-  }
-
   return (
-    <button type="button" className={className} onClick={handleClick} aria-label="Go back">
-      {children}
+    <button
+      type="button"
+      className={clsx('tag', className)}
+      onClick={() => {
+        if (typeof window !== 'undefined' && window.history.length > 1) {
+          router.back()
+        } else {
+          router.push('/')
+        }
+      }}
+    >
+      ← back
     </button>
   )
 }
