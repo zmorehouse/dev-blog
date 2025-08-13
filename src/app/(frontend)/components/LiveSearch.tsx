@@ -42,6 +42,7 @@ export default function LiveSearch({
   const timerRef = useRef<number | null>(null)
 
   const router = useRouter()
+
   useEffect(() => {
     docs.slice(0, 3).forEach((p) => router.prefetch(`/post/${p.slug}`))
   }, [docs, router])
@@ -55,7 +56,11 @@ export default function LiveSearch({
 
   useEffect(() => {
     const newUrl = key ? `/?${key}` : '/'
-    window.history.replaceState(null, '', newUrl)
+
+    const current = window.location.pathname + window.location.search
+    if (current !== newUrl) {
+      startTransition(() => router.replace(newUrl, { scroll: false }))
+    }
 
     const now = Date.now()
     const hit = cache.get(key)
@@ -94,7 +99,7 @@ export default function LiveSearch({
       if (timerRef.current) window.clearTimeout(timerRef.current)
       controllerRef.current?.abort()
     }
-  }, [key])
+  }, [key, router])
 
   return (
     <>
@@ -155,13 +160,13 @@ export default function LiveSearch({
 
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 20 }}>
               {p.tags.map((t, i) => (
-                <a
+                <Link
                   key={`${p.id}-${t}-${i}`}
                   className="tag"
                   href={`/?tag=${encodeURIComponent(t)}`}
                 >
                   {t}
-                </a>
+                </Link>
               ))}
             </div>
           </article>
